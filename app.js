@@ -8,7 +8,6 @@ app.use(paginate.middleware(5, 50));
 app.use(function(req, res, next) {
     res.locals.query = req.query;
     res.locals.page   = req.originalUrl.split('page=')[1];
- 
     next();
  });
 
@@ -32,10 +31,6 @@ app.set('view engine', 'ejs');
 
 // routes
 app.use('/', exoRoutes);
-
-
-
-let User = require('./models/exo');
 
 // starting the server
 app.listen(app.get('port'), () => {

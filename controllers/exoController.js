@@ -2,10 +2,7 @@ const controller = {};
 let Exo = require('../models/exo');
 const validator = require('validator');
 const paginate = require('express-paginate');
-var QRCode = require('qrcode')
-
-
-
+const QRCode = require('qrcode');
 
 
 controller.index = async (req, res, next) => {
@@ -30,31 +27,43 @@ controller.index = async (req, res, next) => {
 
 
 controller.save = (req, res) => {
-    var url = req.body.url_input.replace(/^(https?):\/\//gm, '');
+    try {
+        var url = req.body.url_input.replace(/^(https?):\/\//gm, '');
 
-    let newUrl = Exo({
-        url:  validator.escape(url),
-    })
-    newUrl.nom = validator.escape('item-' + newUrl._id).trim()
-    newUrl.save(function(err) {
+        let newUrl = Exo({
+            url:  validator.escape(url),
+        })
+        newUrl.nom = validator.escape('item-' + newUrl._id).trim()
+        newUrl.save(function(err) {
         if (err) throw err;
         res.redirect("/"); 
-    });
+        });
+    } catch (error) {
+        
+    }
+    
 }
 
 controller.item = (req, res) => {
-    Exo.findOne({nom:req.params.id},(err,url)=>{
-        res.redirect('https://' + url.url);
-    });
+    try {
+        Exo.findOne({nom:req.params.id},(err,url)=>{
+            res.redirect('https://' + url.url);
+        });
+    } catch (error) {
+        
+    }
+    
 }
 
 controller.qrcode = (req,res) => {
-    Exo.findOne({nom:req.params.item},(err,url)=>{
-        QRCode.toDataURL(`https://qr-code-generator-2020.herokuapp.com/item/${url.nom}`, function (err, url) {
-            res.send(url);
-          })
-        // res.redirect('https://' + url.url)
-    });
+    try {
+        Exo.findOne({nom:req.params.item},(err,url)=>{
+            QRCode.toDataURL(`https://qr-code-generator-2020.herokuapp.com/item/${url.nom}`, function (err, url) {
+                res.send(url);
+              })
+        });
+    } catch (error) {   
+    }
 }
 
 module.exports = controller;

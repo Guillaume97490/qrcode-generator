@@ -4,7 +4,7 @@ $(() => {
     $(document).on('click', '[data-id]', function(e){
         e.preventDefault()
         let id = $(this).data('id')
-        console.log(id)
+        // console.log(id)
         $.get(`/qrcode/${id}`, (data) => {
             let image = new Image();
             image.src = data;
