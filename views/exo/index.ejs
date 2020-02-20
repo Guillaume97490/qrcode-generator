@@ -4,19 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Qrcode</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/style.css">
-
 </head>
 
 <body class="d-flex flex-column h-100">
 
     <!-- Navbar -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark mb-5">
-        <a class="navbar-brand" href="#">Exo pagination - qrcode</a>
+        <a class="navbar-brand" href="#">Qrcode</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -29,39 +28,48 @@
 
     <main class="container pt-5 ">
         <div class="row p-3 h-100">
-            <div class="col-lg-6 m-auto">
+            <div class="col-12 m-auto">
 
                 <form action="/" method="post">
                     <div class="form-group">
-                        <label for="">Saisissez votre url :</label>
-                        <input class="form-control" type="text" name="url_input" id="input">
+                        <label for="url-input">Saisissez votre url :</label>
+                        <div class="position-relative">
+                            <input class="form-control" type="text" name="url_input" id="url-input">
+                        
+                            <button id="submit-btn" class="btn btn-success position-absolute" type="submit">Envoyer</button>
+
+                        </div>
                     </div>
-                    <button class="btn btn-success" type="submit">Envoyer</button>
                 </form>
+
             </div>
-            <div class="col-lg-6 m-auto">
-                <table class="table table-light border">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Url</th>
-                            <th>Resultat</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% urls.forEach(function(url) { %>
-                        <tr>
-                            <td style="word-break: break-all;"><%= url.url %></td>
-                            <td style="word-break: break-all;"><a data-id="<%= url.nom%>" href="" target="_blank"
-                                    rel="noopener noreferrer"><%= url.nom%></a></td>
+            <div class="col-12 m-auto">
+                <% urls.forEach(function(url) { %>
 
-                        </tr>
-                        <%  }) %>
-                    </tbody>
-                </table>
+                    <div class="card mb-1">
+                        <div class="card-body">
+                            <div class="row">
 
+                                <div class="col-lg-6 d-flex align-items-center">
+                                    <h4 class="card-title"><%= url.url %></h4>
 
+                                </div>
+
+                                <div class="col-lg-6 d-flex align-items-center">
+                                    <p class="card-text">
+                                        <a data-id="<%= url.nom%>" href="" target="_blank" rel="noopener noreferrer">
+                                            <%= url.nom%>
+                                        </a>
+                                    </p>
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                    </div>
                 
-
+                <%  }) %>
+                   
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
 
@@ -107,8 +115,6 @@
             <small>Guillaume - <a class="text-secondary" href="https://github.com/Guillaume97490">Mon github</a></small>
         </div>
     </footer>
-
-
 
 
     <script src="js/jquery-3.4.1.min.js"></script>

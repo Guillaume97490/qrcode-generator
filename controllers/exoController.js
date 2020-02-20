@@ -59,9 +59,9 @@ controller.qrcode = (req,res) => {
     try {
         Exo.findOne({nom:req.params.item},(err,url)=>{
             QRCode.toDataURL(`https://qr-code-generator-2020.herokuapp.com/item/${url.nom}`, function (err, url) {
-                res.send(url);
+                res.json(url);
               })
-        });
+        }).lean();
     } catch (error) {   
     }
 }

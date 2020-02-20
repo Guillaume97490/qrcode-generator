@@ -2,6 +2,26 @@ main{
     flex: 1 0 auto;
 }
 
+.card .actions a{
+    display: none;
+}
+
+.card:hover .actions a{
+    display: block;
+}
+.card-title, .card-text{
+    word-break: break-all;
+}
+#submit-btn{
+    top: 0;
+    right: 0;
+}
+.url-input{
+    padding-right: 100px;
+}
+
+
+
 #qrcode img{
     width: 100%;
 }
