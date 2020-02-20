@@ -50,7 +50,7 @@ controller.item = (req, res) => {
 
 controller.qrcode = (req,res) => {
     Exo.findOne({nom:req.params.item},(err,url)=>{
-        QRCode.toDataURL(url.url, function (err, url) {
+        QRCode.toDataURL(`https://qr-code-generator-2020.herokuapp.com/item/${url.nom}`, function (err, url) {
             res.send(url);
           })
         // res.redirect('https://' + url.url)
