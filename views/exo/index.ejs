@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html class="h-100" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css">
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+    <!-- Navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark mb-5">
+        <a class="navbar-brand" href="#">Exo pagination - qrcode</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        </div>
+    </nav>
+
+
+    <main class="container pt-5 ">
+        <div class="row p-3 h-100">
+            <div class="col-lg-6 m-auto">
+
+                <form action="/exo" method="post">
+                    <div class="form-group">
+                        <label for="">Saisissez votre url :</label>
+                        <input class="form-control" type="text" name="url_input" id="input">
+                    </div>
+                    <button class="btn btn-success" type="submit">Envoyer</button>
+                </form>
+            </div>
+            <div class="col-lg-6 m-auto">
+                <table class="table table-light">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Url</th>
+                            <th>Resultat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% urls.forEach(function(url) { %>
+                        <tr>
+                            <td style="word-break: break-all;"><%= url.url %></td>
+                            <td style="word-break: break-all;"><a data-id="<%= url.nom%>" href="" target="_blank"
+                                    rel="noopener noreferrer"><%= url.nom%></a></td>
+
+                        </tr>
+                        <%  }) %>
+                    </tbody>
+                </table>
+
+
+                
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+
+                        <%for(let i =1; i <= pageCount;  i++ ) {  %>
+                            <li class="page-item"><a  class="page-link <% if (page == i) { %>bg-primary text-white<% } %>" href="/exo?page=<%=i%>"><%=i%></a></li>
+                        <% } %>
+                        <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                          <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+
+    </main>
+
+    <div id="myModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Scannez-moi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div id="qrcode" class="col-12 text-center">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer id="sticky-footer" class="py-2 bg-dark text-white-50">
+        <div class="container text-center">
+            <small>Guillaume - <a class="text-secondary" href="https://github.com/Guillaume97490">Mon github</a></small>
+        </div>
+    </footer>
+
+
+
+
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

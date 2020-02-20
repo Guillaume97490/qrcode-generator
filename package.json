@@ -1,0 +1,22 @@
+{
+  "name": "exo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --delay 0.3 app.js -e ejs,js,json",
+    "stop": "lsof -ti :3000 | xargs kill"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-paginate": "^1.0.0",
+    "mongoose": "^5.9.1",
+    "qrcode": "^1.4.4",
+    "validator": "^12.2.0"
+  }
+}
