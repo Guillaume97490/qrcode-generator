@@ -5,7 +5,7 @@ $(() => {
         e.preventDefault()
         let id = $(this).data('id')
         console.log(id)
-        $.get(`/exo/qrcode/${id}`, (data) => {
+        $.get(`/qrcode/${id}`, (data) => {
             let image = new Image();
             image.src = data;
             $('#qrcode').append(image);

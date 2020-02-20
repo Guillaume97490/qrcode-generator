@@ -31,7 +31,8 @@ app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 
 // routes
-app.use('/exo', exoRoutes);
+app.use('/', exoRoutes);
+
 
 
 let User = require('./models/exo');

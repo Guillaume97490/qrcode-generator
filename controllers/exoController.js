@@ -38,12 +38,12 @@ controller.save = (req, res) => {
     newUrl.nom = validator.escape('item-' + newUrl._id).trim()
     newUrl.save(function(err) {
         if (err) throw err;
-        res.redirect("/exo"); 
+        res.redirect("/"); 
     });
 }
 
 controller.item = (req, res) => {
-    Exo.findOne({nom:req.params.item},(err,url)=>{
+    Exo.findOne({nom:req.params.id},(err,url)=>{
         res.redirect('https://' + url.url);
     });
 }

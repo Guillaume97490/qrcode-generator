@@ -31,7 +31,7 @@
         <div class="row p-3 h-100">
             <div class="col-lg-6 m-auto">
 
-                <form action="/exo" method="post">
+                <form action="/" method="post">
                     <div class="form-group">
                         <label for="">Saisissez votre url :</label>
                         <input class="form-control" type="text" name="url_input" id="input">
@@ -66,7 +66,7 @@
                     <ul class="pagination">
 
                         <%for(let i =1; i <= pageCount;  i++ ) {  %>
-                            <li class="page-item"><a  class="page-link <% if (page == i) { %>bg-primary text-white<% } %>" href="/exo?page=<%=i%>"><%=i%></a></li>
+                            <li class="page-item"><a  class="page-link <% if (page == i) { %>bg-primary text-white<% } %>" href="/?page=<%=i%>"><%=i%></a></li>
                         <% } %>
                         <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                           <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
