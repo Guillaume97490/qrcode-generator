@@ -30,13 +30,13 @@
         <div class="row p-3 h-100">
             <div class="col-12 m-auto">
 
-                <form action="/" method="post">
+                <form id="form-url" data-parsley-validate action="/" method="post">
                     <div class="form-group">
                         <label for="url-input">Saisissez votre url :</label>
                         <div class="position-relative">
-                            <input class="form-control" type="text" name="url_input" id="url-input">
+                            <input data-parsley-trigger="keyup" placeholder="www.exemple.com" class="form-control font-weight-bolder" type="url" name="url_input" id="url-input" required>
                         
-                            <button id="submit-btn" class="btn btn-success position-absolute" type="submit">Envoyer</button>
+                            <button id="submit-btn" class="btn btn-success font-weight-bolder position-absolute" type="submit">Envoyer</button>
 
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                 <% urls.forEach(function(url) { %>
 
                     <div class="card mb-1">
-                        <div class="card-body">
+                        <div class="card-body py-2">
                             <div class="row">
 
                                 <div class="col-lg-6 d-flex align-items-center">
@@ -124,7 +124,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+    <script src="js/parsley.js"></script>
+    <script src="js/parsley-fr.js"></script>
     <script src="js/script.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lep6NoUAAAAABVg-Rt15HlXBohuCJK7QhggzQgT"></script>
 </body>
 
 </html>

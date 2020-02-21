@@ -19,6 +19,28 @@ main{
 .url-input{
     padding-right: 100px;
 }
+.parsley-errors-list{
+    color:#ff0019;
+    list-style: none;
+    padding: initial;
+}
+input.parsley-error{
+    background: #ff09208f !important;
+    color: white !important;
+}
+input.parsley-success{
+    background: #42ff098f !important;
+}
+#url-input::placeholder{
+    opacity: .5;
+}
+#submit-btn.disabled{
+    background: grey;
+    opacity: 1;
+    cursor: initial;
+    color: #b3b3b3;
+    border: solid 1px grey;
+}
 
 
 
