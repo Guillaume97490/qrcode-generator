@@ -20,16 +20,16 @@ main{
     padding-right: 100px;
 }
 .parsley-errors-list{
-    color:#ff0019;
+    position: absolute;
+    color:#dc3545;
     list-style: none;
     padding: initial;
 }
 input.parsley-error{
-    background: #ff09208f !important;
-    color: white !important;
+    color: #dc3545 !important;
 }
 input.parsley-success{
-    background: #42ff098f !important;
+    color: #28a745 !important;
 }
 #url-input::placeholder{
     opacity: .5;

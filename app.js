@@ -3,6 +3,22 @@ const bodyParser = require('body-parser');
 const app = express();
 const paginate = require('express-paginate');
 
+const session = require('express-session');
+const flash = require('connect-flash');
+
+app.use(session({
+    secret:"The milk would do that",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(flash());
+
+app.use(function(req, res, next){
+    res.locals.message = req.flash();
+    next();
+});
+
 app.use(paginate.middleware(5, 50));
 
 app.use(function(req, res, next) {
@@ -31,6 +47,19 @@ app.set('view engine', 'ejs');
 
 // routes
 app.use('/', exoRoutes);
+
+app.use(function(req, res, next) {
+    req.flash("error", 'La route '+req.url+' n\'a pas été trouvé...');
+    return res.status(404).redirect('/');
+    // return res.status(404).send({ message: 'Route'+req.url+' Not found.' });
+
+});
+app.use(function(err, req, res, next) {
+    req.flash("error", 'Un probléme est survenue');
+    return res.status(500).redirect('/');
+    // return res.status(500).send({ error: err });
+
+});
 
 // starting the server
 app.listen(app.get('port'), () => {

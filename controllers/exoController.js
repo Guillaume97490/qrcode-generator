@@ -9,12 +9,11 @@ const fetch = require('isomorphic-fetch');
 controller.index = async (req, res, next) => {
     try {
         const [results, itemCount] = await Promise.all([
-            Exo.find({}).limit(req.query.limit).skip(req.skip).lean().exec(),
+            Exo.find({}).sort({ _id: -1 }).limit(req.query.limit).skip(req.skip).lean().exec(),
             Exo.countDocuments({})
         ]);
 
         const pageCount = Math.ceil(itemCount / req.query.limit);
-        // console.log('limit:'+req.query.limit+  '\nitemCount:'+itemCount+ '\npageCount:'+pageCount);
         res.render('./exo/index.ejs', {
             urls: results,
             pageCount,
@@ -28,69 +27,75 @@ controller.index = async (req, res, next) => {
 
 
 controller.save = async (req, res) => {
-    // try {
-    // console.log(req.body);
+
+    if (req.body.url_input == ""){
+      return res.redirect("/");
+    } 
+      
     const secret_key = process.env.SECRET_KEY;
     const token = req.body.token;
     const verifUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${token}`;
+    let url = req.body.url_input.replace(/^(https?):\/\//gm, '');
+    url = validator.escape(url);
 
+    const urlExist = require("url-exist");
 
-    if (!process.env.SECRET_KEY){
-        if (req.body.url_input == "") return res.redirect("/");
-            var url = req.body.url_input.replace(/^(https?):\/\//gm, '');
-
+    (async () => {
+        const exists = await urlExist("https://"+url);
+        // console.log(exists);
+        if (exists === true){
+          if (!process.env.SECRET_KEY) {
             let newUrl = Exo({
-                url: validator.escape(url),
+                url: url,
             });
             newUrl.nom = validator.escape('item-' + newUrl._id).trim();
             newUrl.save(function (err) {
                 if (err) throw err;
+                req.flash("success", "L'url à bien été enregistrée");
                 res.redirect("/");
             });
-    }
+          }
+  
+          const response = await fetch(verifUrl, {
+            method: 'post'
+          })
+            .then(response => response.json())
+            .then(google_response => {
+                if (google_response.success == true) {
+                    let newUrl = Exo({
+                        url: url,
+                    });
+                    newUrl.nom = validator.escape('item-' + newUrl._id).trim();
+                    newUrl.save(function (err) {
+                        if (err) throw err;
+                        req.flash("success", "L'url à bien été enregistrée");
+                        res.redirect("/");
+                    });
+                }
+            })
+            .catch(error => res.json({ error }));
 
-    const response = await fetch(verifUrl, {
-        method: 'post'
-    })
-        .then(response => response.json())
-        .then(google_response => {
-            if (google_response.success == true) {
-                // todo; save et redirrect
-                // res.json("true")
+        }
+        if(exists === false){
+          req.flash("error", "L'url n'existe pas");
+          res.redirect('/');
+        }
 
-                if (req.body.url_input == "") return res.redirect("/");
-                var url = req.body.url_input.replace(/^(https?):\/\//gm, '');
-
-                let newUrl = Exo({
-                    url: validator.escape(url),
-                });
-                newUrl.nom = validator.escape('item-' + newUrl._id).trim();
-                newUrl.save(function (err) {
-                    if (err) throw err;
-                    res.redirect("/");
-                });
-            }
-            // res.json({ google_response })
-        })
-        .catch(error => res.json({ error }));
-
-    // console.log(response);
-
-    // } catch (error) {
-
-    // }
+    })();
 
 }
 
 controller.item = (req, res) => {
-    try {
+    // try {
         Exo.findOne({ nom: req.params.id }, (err, url) => {
-            res.redirect('https://' + url.url);
-        });
-    } catch (error) {
-
-    }
-
+            if (url === null) {
+              req.flash("error", "Un problème est survenu, veuillez réessayer");
+              res.redirect('/');
+            }
+            if (url !== null) {
+              res.redirect('https://' + url.url);
+            }
+        }).lean();
 }
 
 controller.qrcode = (req, res) => {
