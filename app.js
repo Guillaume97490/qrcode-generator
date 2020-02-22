@@ -7,6 +7,7 @@ const helmet = require('helmet')
 
 const session = require('express-session');
 const flash = require('connect-flash');
+process.env.URL
 app.use(helmet());
 
 app.use(compression());
