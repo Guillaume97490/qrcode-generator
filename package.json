@@ -21,6 +21,7 @@
     "helmet": "^3.21.2",
     "isomorphic-fetch": "^2.2.1",
     "mongoose": "^5.9.1",
+    "mongoose-auto-increment": "^5.0.1",
     "qrcode": "^1.4.4",
     "url-exist": "^1.1.1",
     "validator": "^12.2.0"

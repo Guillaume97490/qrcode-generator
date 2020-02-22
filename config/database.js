@@ -4,7 +4,8 @@ var ObjectId = require('mongodb').ObjectID;
 mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost:27017/qrcode-gen',{
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false 
+  useFindAndModify: false,
+  useCreateIndex: true,
 }).then(() => {
   //connection established successfully
   console.log('connection established successfully')

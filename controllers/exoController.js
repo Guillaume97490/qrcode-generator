@@ -12,6 +12,7 @@ controller.index = async (req, res, next) => {
             Exo.find({}).sort({ _id: -1 }).limit(req.query.limit).skip(req.skip).lean().exec(),
             Exo.countDocuments({})
         ]);
+        // console.log(results)
 
         const pageCount = Math.ceil(itemCount / req.query.limit);
         res.render('./exo/index.ejs', {
@@ -45,14 +46,19 @@ controller.save = async (req, res) => {
         // console.log(exists);
         if (exists === true){
           if (!process.env.SECRET_KEY) {
-            let newUrl = Exo({
-                url: url,
-            });
-            newUrl.nom = validator.escape('item-' + newUrl._id).trim();
-            newUrl.save(function (err) {
+            Exo.nextCount(function(err, count) {
                 if (err) throw err;
-                req.flash("success", "L'url à bien été enregistrée");
-                res.redirect("/");
+                let newUrl = Exo({url});
+                newUrl.nextCount(function(err, count) {
+                    // console.log(url);
+                    if (err) throw err;
+                    newUrl.nom = validator.escape('item-' + count).trim();
+                    newUrl.save(function (err) {
+                        if (err) throw err;
+                        req.flash("success", "L'url à bien été enregistrée");
+                        res.redirect("/");
+                    });
+                });
             });
           }
   
@@ -62,14 +68,18 @@ controller.save = async (req, res) => {
             .then(response => response.json())
             .then(google_response => {
                 if (google_response.success == true) {
-                    let newUrl = Exo({
-                        url: url,
-                    });
-                    newUrl.nom = validator.escape('item-' + newUrl._id).trim();
-                    newUrl.save(function (err) {
+                    Exo.nextCount(function(err, count) {
                         if (err) throw err;
-                        req.flash("success", "L'url à bien été enregistrée");
-                        res.redirect("/");
+                        let newUrl = Exo({url});
+                        newUrl.nextCount(function(err, count) {
+                            if (err) throw err
+                            newUrl.nom = validator.escape('item-' + count).trim();
+                            newUrl.save(function (err) {
+                                if (err) throw err;
+                                req.flash("success", "L'url à bien été enregistrée");
+                                res.redirect("/");
+                            });
+                        });
                     });
                 }
             })
