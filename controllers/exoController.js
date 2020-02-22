@@ -20,7 +20,7 @@ controller.index = async (req, res, next) => {
             pageCount,
             itemCount,
             pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
-            siteUrl: process.env.URL||'localhost:3000'
+            siteUrl: process.env.URL||'localhost:3000/'
         })
     } catch (err) {
         next(err);
