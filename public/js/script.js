@@ -3,6 +3,11 @@ $(() => {
 
   $('#submit-btn').click((e) => {
     e.preventDefault();
+    if ($('#submit-btn.disabled').length) return;
+    if ($('#url-input').val() == "") return $('#form-url').parsley().validate();
+    $('#form-url .not-loading').addClass('d-none');
+    $('#form-url .loading').removeClass('d-none');
+
     grecaptcha.ready(function () {
       grecaptcha.execute('6Lep6NoUAAAAABVg-Rt15HlXBohuCJK7QhggzQgT', { action: 'homepage' }).then(function (token) {
         $('#form-url').prepend('<input type="hidden" name="token" value="' + token + '">');

@@ -2,9 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const paginate = require('express-paginate');
+const compression = require('compression');
+const helmet = require('helmet')
 
 const session = require('express-session');
 const flash = require('connect-flash');
+app.use(helmet());
+
+app.use(compression());
+app.use('app', function (req, res, next) {});
 
 app.use(session({
     secret:"The milk would do that",
@@ -31,7 +37,6 @@ app.use(function(req, res, next) {
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
 app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/public'));
