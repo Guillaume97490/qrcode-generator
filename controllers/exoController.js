@@ -4,6 +4,7 @@ const validator = require('validator');
 const paginate = require('express-paginate');
 const QRCode = require('qrcode');
 const fetch = require('isomorphic-fetch');
+const siteUrl = process.env.URL||'localhost:3000/'
 
 
 controller.index = async (req, res, next) => {
@@ -20,7 +21,7 @@ controller.index = async (req, res, next) => {
             pageCount,
             itemCount,
             pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
-            siteUrl: process.env.URL||'localhost:3000/'
+            siteUrl 
         })
     } catch (err) {
         next(err);
@@ -112,7 +113,7 @@ controller.item = (req, res) => {
 controller.qrcode = (req, res) => {
     try {
         Exo.findOne({ nom: req.params.item }, (err, url) => {
-            QRCode.toDataURL(`https://qr-code-generator-2020.herokuapp.com/item/${url.nom}`, function (err, url) {
+            QRCode.toDataURL(siteUrl + url.nom, function (err, url) {
                 res.json(url);
             })
         }).lean();

@@ -1,5 +1,6 @@
 
 $(() => {
+  $('[data-toggle="tooltip"]').tooltip();
 
   $('#submit-btn').click((e) => {
     e.preventDefault();
@@ -22,7 +23,6 @@ $(() => {
     if ($('#form-url').parsley().validate()) {
       $('#submit-btn').removeClass('disabled');
     }
-
   })
 
   $(document).on('click', '[data-id]', function (e) {
@@ -39,4 +39,16 @@ $(() => {
   $('#myModal').on('hidden.bs.modal', function (e) {
     $('#qrcode').html('');
   })
+
+  $('[data-copy-id]').click(function() {
+      let id = $(this).data('copyId');
+      let text = $(`a[data-id=${id}]`).text().trim();
+      let temp = $("<input style='opacity:0;'>");
+      $("body").append(temp);
+      temp.val(text).select();
+      document.execCommand("copy");
+      $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
+      temp.remove();
+  });
+  
 })
