@@ -105,7 +105,7 @@ controller.item = (req, res) => {
               res.redirect('/');
             }
             if (url !== null) {
-              res.redirect('https://' + url.url);
+              res.redirect('https://item/' + url.url);
             }
         }).lean();
 }
