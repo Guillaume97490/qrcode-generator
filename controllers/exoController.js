@@ -44,7 +44,7 @@ controller.save = async (req, res) => {
     const urlExist = require("url-exist");
 
     (async () => {
-        const exists = await urlExist("https://"+url);
+        const exists = await urlExist("https://"+validator.unescape(url));
         // console.log(exists);
         if (exists === true){
           if (!process.env.SECRET_KEY) {
@@ -105,7 +105,7 @@ controller.item = (req, res) => {
               res.redirect('/');
             }
             if (url !== null) {
-              res.redirect('https://' + url.url);
+              res.redirect('https://' + validator.unescape(url.url));
             }
         }).lean();
 }
