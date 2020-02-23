@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const paginate = require('express-paginate');
 const compression = require('compression');
-const helmet = require('helmet')
+const helmet = require('helmet');
 
 const session = require('express-session');
 const flash = require('connect-flash');

@@ -8,6 +8,7 @@ const siteUrl = process.env.URL||'localhost:3000/'
 
 
 controller.index = async (req, res, next) => {
+    
     try {
         const [results, itemCount] = await Promise.all([
             Exo.find({}).sort({ _id: -1 }).limit(req.query.limit).skip(req.skip).lean().exec(),

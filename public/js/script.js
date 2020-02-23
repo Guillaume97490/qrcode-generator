@@ -12,7 +12,14 @@ $(() => {
     grecaptcha.ready(function () {
       grecaptcha.execute('6Lep6NoUAAAAABVg-Rt15HlXBohuCJK7QhggzQgT', { action: 'homepage' }).then(function (token) {
         $('#form-url').prepend('<input type="hidden" name="token" value="' + token + '">');
-        $('#form-url').submit();
+        // $('#form-url').submit();
+        let url = {
+          token : token,
+          url_input: $('#url-input').val()
+        }
+        $.post('/', url, (data) => {
+          console.log(data);
+        })
       });
     });
 
