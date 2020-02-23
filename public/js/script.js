@@ -3,6 +3,10 @@ $(() => {
   $('[data-toggle="tooltip"]').tooltip();
 
   $('#submit-btn').click((e) => {
+    if ($("#errorModal").length > 0) {$("#errorModal").remove();}
+    if ($("#successModal").length > 0) {$("#successModal").remove();}
+
+     
     e.preventDefault();
     if ($('#submit-btn.disabled').length) return;
     if ($('#url-input').val() == "") return $('#form-url').parsley().validate();
@@ -18,7 +22,12 @@ $(() => {
           url_input: $('#url-input').val()
         }
         $.post('/', url, (data) => {
-          console.log(data);
+          $('#form-url .loading').addClass('d-none');
+          $('#form-url .not-loading').removeClass('d-none');
+          // console.log(data);
+          $('html').append(data);
+          
+          $('#errorModal').modal('toggle')
         })
       });
     });
@@ -57,5 +66,5 @@ $(() => {
       $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
       temp.remove();
   });
-  
+
 })

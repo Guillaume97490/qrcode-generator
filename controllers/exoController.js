@@ -5,6 +5,7 @@ const paginate = require('express-paginate');
 const QRCode = require('qrcode');
 const fetch = require('isomorphic-fetch');
 const siteUrl = process.env.URL||'localhost:3000/'
+const ejs = require('ejs');
 
 
 controller.index = async (req, res, next) => {
@@ -59,7 +60,20 @@ controller.save = async (req, res) => {
                     newUrl.save(function (err) {
                         if (err) throw err;
                         req.flash("success", "L'url à bien été enregistrée");
-                        res.redirect("/");
+                        if (req.xhr) {
+                            res.set('Content-Type', 'text/html');
+                            let errorModalTpl = require('../views/templates/errorModal.js').data;
+                            data= {
+                                type: "success",
+                                message: "L'url à bien été enregistrée."
+                            }
+                            let compiled = ejs.compile(errorModalTpl);
+                            let html = compiled({data});
+                            res.send(Buffer.from(html,'utf8'));
+                        }
+                        if (!req.xhr){
+                            res.redirect("/");
+                        }
                     });
                 });
             });
@@ -80,7 +94,20 @@ controller.save = async (req, res) => {
                             newUrl.save(function (err) {
                                 if (err) throw err;
                                 req.flash("success", "L'url à bien été enregistrée");
-                                res.redirect("/");
+                                if (req.xhr) {
+                                    res.set('Content-Type', 'text/html');
+                                    let errorModalTpl = require('../views/templates/errorModal.js').data;
+                                    data= {
+                                        type: "success",
+                                        message: "L'url à bien été enregistrée."
+                                    }
+                                    let compiled = ejs.compile(errorModalTpl);
+                                    let html = compiled({data});
+                                    res.send(Buffer.from(html,'utf8'));
+                                }
+                                if (!req.xhr){
+                                    res.redirect("/");
+                                }
                             });
                         });
                     });
@@ -91,6 +118,17 @@ controller.save = async (req, res) => {
         }
         if(exists === false){
           req.flash("error", "L'url n'existe pas");
+        if (req.xhr) {
+            res.set('Content-Type', 'text/html');
+            let errorModalTpl = require('../views/templates/errorModal.js').data;
+            data= {
+                type: "error",
+                message: "L'url n'existe pas."
+            }
+            let compiled = ejs.compile(errorModalTpl);
+            let html = compiled({data});
+            res.send(Buffer.from(html,'utf8'));
+        }
           res.redirect('/');
         }
 
