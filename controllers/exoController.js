@@ -113,7 +113,7 @@ controller.item = (req, res) => {
 controller.qrcode = (req, res) => {
     try {
         Exo.findOne({ nom: req.params.item }, (err, url) => {
-            QRCode.toDataURL(siteUrl + url.nom, function (err, url) {
+            QRCode.toDataURL(siteUrl+'item/' + url.nom, function (err, url) {
                 res.json(url);
             })
         }).lean();
