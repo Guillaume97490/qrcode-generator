@@ -3,7 +3,7 @@ $(() => {
   $('[data-toggle="tooltip"]').tooltip();
 
   $('#submit-btn').click((e) => {
-    if ($("#errorModal").length > 0) {$("#errorModal").remove();}
+    if ($("#modalTpl").length > 0) {$("#modalTpl").remove();}
     if ($("#successModal").length > 0) {$("#successModal").remove();}
 
      
@@ -27,7 +27,20 @@ $(() => {
           // console.log(data);
           $('html').append(data);
           
-          $('#errorModal').modal('toggle')
+          $('#modalTpl').modal('toggle');
+          $('[data-toggle="tooltip"]').tooltip();
+          $('[data-copy-id]').click(function() {
+            let id = $(this).data('copyId');
+            let text = $(`[data-id=${id}]`).text().trim();
+            let temp = $("<input style='opacity:0;'>");
+            $("#modalTpl .modal-body").append(temp);
+            temp.val(text).select();
+            console.log(temp.val());
+            document.execCommand("copy");
+            $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
+            temp.remove();
+          })
+
         })
       });
     });
@@ -58,6 +71,7 @@ $(() => {
 
   $('[data-copy-id]').click(function() {
       let id = $(this).data('copyId');
+      console.log(id);
       let text = $(`a[data-id=${id}]`).text().trim();
       let temp = $("<input style='opacity:0;'>");
       $("body").append(temp);

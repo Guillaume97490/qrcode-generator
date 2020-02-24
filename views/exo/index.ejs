@@ -156,7 +156,7 @@
                 <%  }) %>
                 
                 <nav class="col-12" aria-label="Page navigation example">
-                    <ul class="pagination">
+                    <ul class="pagination overflow-auto">
     
                         <%for(let i =1; i <= pageCount;  i++ ) {  %>
                             <li class="page-item"><a  class="page-link <% if ((page == i) || (!page && i==1) || (page < 0 && i==1) ) { %>bg-primary text-white<% } %>" href="/?page=<%=i%>"><%=i%></a></li>
