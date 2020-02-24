@@ -35,7 +35,6 @@ $(() => {
             let temp = $("<input style='opacity:0;'>");
             $("#modalTpl .modal-body").append(temp);
             temp.val(text).select();
-            console.log(temp.val());
             document.execCommand("copy");
             $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
             temp.remove();

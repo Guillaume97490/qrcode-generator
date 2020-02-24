@@ -55,13 +55,13 @@ app.set('view engine', 'ejs');
 app.use('/', exoRoutes);
 
 app.use(function(req, res, next) {
-    req.flash("error", 'La route '+req.url+' n\'a pas été trouvé...');
+    // req.flash("error", 'La route '+req.url+' n\'a pas été trouvé...');
     return res.status(404).redirect('/');
     // return res.status(404).send({ message: 'Route'+req.url+' Not found.' });
 
 });
 app.use(function(err, req, res, next) {
-    req.flash("error", 'Un probléme est survenue');
+    // req.flash("error", 'Un probléme est survenue');
     return res.status(500).redirect('/');
     // return res.status(500).send({ error: err });
 

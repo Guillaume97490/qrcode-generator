@@ -62,14 +62,14 @@ controller.save = async (req, res) => {
                         req.flash("success", "L'url à bien été enregistrée");
                         if (req.xhr) {
                             res.set('Content-Type', 'text/html');
-                            let modalTplTpl = require('../views/templates/modalTpl.js').data;
+                            let modalTpl = require('../views/templates/modalTpl.js').data;
                             data= {
                                 type: "success",
                                 message: "L'url à bien été enregistrée.",
                                 newUrl: newUrl,
                                 siteUrl: siteUrl
                             }
-                            let compiled = ejs.compile(modalTplTpl);
+                            let compiled = ejs.compile(modalTpl);
                             let html = compiled({data});
                             res.send(Buffer.from(html,'utf8'));
                         }
@@ -98,12 +98,14 @@ controller.save = async (req, res) => {
                                 req.flash("success", "L'url à bien été enregistrée");
                                 if (req.xhr) {
                                     res.set('Content-Type', 'text/html');
-                                    let modalTplTpl = require('../views/templates/modalTpl.js').data;
+                                    let modalTpl = require('../views/templates/modalTpl.js').data;
                                     data= {
                                         type: "success",
-                                        message: "L'url à bien été enregistrée."
+                                        message: "L'url à bien été enregistrée.",
+                                        newUrl: newUrl,
+                                        siteUrl: siteUrl
                                     }
-                                    let compiled = ejs.compile(modalTplTpl);
+                                    let compiled = ejs.compile(modalTpl);
                                     let html = compiled({data});
                                     res.send(Buffer.from(html,'utf8'));
                                 }
@@ -122,12 +124,12 @@ controller.save = async (req, res) => {
           req.flash("error", "L'url n'existe pas");
         if (req.xhr) {
             res.set('Content-Type', 'text/html');
-            let modalTplTpl = require('../views/templates/modalTpl.js').data;
+            let modalTpl = require('../views/templates/modalTpl.js').data;
             data= {
                 type: "error",
                 message: "L'url n'existe pas."
             }
-            let compiled = ejs.compile(modalTplTpl);
+            let compiled = ejs.compile(modalTpl);
             let html = compiled({data});
             res.send(Buffer.from(html,'utf8'));
         }
