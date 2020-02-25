@@ -1,6 +1,6 @@
 
 $(() => {
-  $('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="tooltip"]').tooltip(); // ENABLE TOOLTIPS 
 
   $('#submit-btn').click((e) => {
     if ($("#modalTpl").length > 0) {$("#modalTpl").remove();}
@@ -14,22 +14,22 @@ $(() => {
     $('#form-url .loading').removeClass('d-none');
 
     grecaptcha.ready(function () {
-      grecaptcha.execute('6Lep6NoUAAAAABVg-Rt15HlXBohuCJK7QhggzQgT', { action: 'homepage' }).then(function (token) {
+      grecaptcha.execute('6Lep6NoUAAAAABVg-Rt15HlXBohuCJK7QhggzQgT', { action: 'homepage' }).then(function (token) { // GOOGLE RECAPCHA V3
         $('#form-url').prepend('<input type="hidden" name="token" value="' + token + '">');
         // $('#form-url').submit();
         let url = {
           token : token,
           url_input: $('#url-input').val()
         }
-        $.post('/', url, (data) => {
+        $.post('/', url, (data) => { // POST NEW URL 
           $('#form-url .loading').addClass('d-none');
           $('#form-url .not-loading').removeClass('d-none');
           // console.log(data);
           $('html').append(data);
           
           $('#modalTpl').modal('toggle');
-          $('[data-toggle="tooltip"]').tooltip();
-          $('[data-copy-id]').click(function() {
+          $('[data-toggle="tooltip"]').tooltip(); // ENABLE TOOLTIP ON MODAL
+          $('[data-copy-id]').click(function() { // COPY FUNCTION ON MODAL 
             let id = $(this).data('copyId');
             let text = $(`[data-id=${id}]`).text().trim();
             let temp = $("<input style='opacity:0;'>");
@@ -53,7 +53,7 @@ $(() => {
     }
   })
 
-  $(document).on('click', '[data-id]', function (e) {
+  $(document).on('click', 'a[data-id]', function (e) { // GET QRCODE FUNCTION
     e.preventDefault();
     let id = $(this).data('id');
     $.get(`/qrcode/${id}`, (data) => {
@@ -68,7 +68,7 @@ $(() => {
     $('#qrcode').html('');
   })
 
-  $('[data-copy-id]').click(function() {
+  $('.[data-copy-id]').click(function() { // COPY FUNCTION
       let id = $(this).data('copyId');
       console.log(id);
       let text = $(`a[data-id=${id}]`).text().trim();

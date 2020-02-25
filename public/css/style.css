@@ -237,6 +237,10 @@ a:hover,a:focus {
     margin-bottom: 25px
 }
 
+#myModal{
+    z-index: 5000;
+}
+
 
 
 .help-section {
@@ -303,8 +307,9 @@ a:hover,a:focus {
 
 .hero-section{
     background-size: cover;
-    background-image: url(/img/office-620822_1920.jpg);
+    background-image: url(/img/pexels-photo-2086917.jpeg);
     background-blend-mode: overlay;
+    background-position: center;
 
 }
 .alert{
