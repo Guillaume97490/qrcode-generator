@@ -6,6 +6,7 @@ const QRCode = require('qrcode');
 const fetch = require('isomorphic-fetch');
 const siteUrl = process.env.URL||'localhost:3000/'
 const ejs = require('ejs');
+let modalTpl = require('../views/templates/modalTpl.js').data;
 
 
 controller.index = async (req, res, next) => {
@@ -15,7 +16,6 @@ controller.index = async (req, res, next) => {
             Exo.find({}).sort({ _id: -1 }).limit(req.query.limit).skip(req.skip).lean().exec(),
             Exo.countDocuments({})
         ]);
-        // console.log(results)
 
         const pageCount = Math.ceil(itemCount / req.query.limit);
         res.render('./exo/index.ejs', {
@@ -32,7 +32,6 @@ controller.index = async (req, res, next) => {
 
 
 controller.save = async (req, res) => {
-
     if (req.body.url_input == ""){
       return res.redirect("/");
     } 
@@ -47,22 +46,18 @@ controller.save = async (req, res) => {
 
     (async () => {
         const exists = await urlExist("https://"+validator.unescape(url));
-        // console.log(exists);
         if (exists === true){
-          if (!process.env.SECRET_KEY) {
+          if (!process.env.SECRET_KEY) { // CHECK IF GOOGLE RECAPTCHA SECRET_KEY
             Exo.nextCount(function(err, count) {
                 if (err) throw err;
-                let newUrl = Exo({url});
+                let newUrl = Exo({url}); // CREATE NEW OBJECT OF URL
                 newUrl.nextCount(function(err, count) {
-                    // console.log(url);
                     if (err) throw err;
                     newUrl.nom = validator.escape('item-' + count).trim();
-                    newUrl.save(function (err) {
+                    newUrl.save(function (err) { // SAVE THE OBJECT
                         if (err) throw err;
-                        req.flash("success", "L'url à bien été enregistrée");
-                        if (req.xhr) {
+                        if (req.xhr) { // IF AJAX 
                             res.set('Content-Type', 'text/html');
-                            let modalTpl = require('../views/templates/modalTpl.js').data;
                             data= {
                                 type: "success",
                                 message: "L'url à bien été enregistrée.",
@@ -71,7 +66,7 @@ controller.save = async (req, res) => {
                             }
                             let compiled = ejs.compile(modalTpl);
                             let html = compiled({data});
-                            res.send(Buffer.from(html,'utf8'));
+                            res.send(Buffer.from(html,'utf8')); // SEND MODAL IN HTML 
                         }
                         if (!req.xhr){
                             res.redirect("/");
@@ -86,7 +81,7 @@ controller.save = async (req, res) => {
           })
             .then(response => response.json())
             .then(google_response => {
-                if (google_response.success == true) {
+                if (google_response.success == true) { // IF GOOGLE RECAPTCHA IS OK
                     Exo.nextCount(function(err, count) {
                         if (err) throw err;
                         let newUrl = Exo({url});
@@ -95,10 +90,8 @@ controller.save = async (req, res) => {
                             newUrl.nom = validator.escape('item-' + count).trim();
                             newUrl.save(function (err) {
                                 if (err) throw err;
-                                req.flash("success", "L'url à bien été enregistrée");
                                 if (req.xhr) {
                                     res.set('Content-Type', 'text/html');
-                                    let modalTpl = require('../views/templates/modalTpl.js').data;
                                     data= {
                                         type: "success",
                                         message: "L'url à bien été enregistrée.",
@@ -121,10 +114,8 @@ controller.save = async (req, res) => {
 
         }
         if(exists === false){
-          req.flash("error", "L'url n'existe pas");
         if (req.xhr) {
             res.set('Content-Type', 'text/html');
-            let modalTpl = require('../views/templates/modalTpl.js').data;
             data= {
                 type: "error",
                 message: "L'url n'existe pas."
@@ -135,33 +126,26 @@ controller.save = async (req, res) => {
         }
           res.redirect('/');
         }
-
     })();
 
 }
 
 controller.item = (req, res) => {
-    // try {
-        Exo.findOne({ nom: req.params.id }, (err, url) => {
-            if (url === null) {
-              req.flash("error", "Un problème est survenu, veuillez réessayer");
-              res.redirect('/');
-            }
-            if (url !== null) {
-              res.redirect('https://' + validator.unescape(url.url));
-            }
-        }).lean();
+    Exo.findOne({ nom: req.params.id }, (err, url) => {
+        if (url === null) {
+            res.redirect('/');
+        }
+        if (url !== null) {
+            res.redirect('https://' + validator.unescape(url.url));
+        }
+    }).lean();
 }
 
 controller.qrcode = (req, res) => {
-    try {
-        Exo.findOne({ nom: req.params.item }, (err, url) => {
-            QRCode.toDataURL(siteUrl+'item/' + url.nom, function (err, url) {
-                res.json(url);
-            })
-        }).lean();
-    } catch (error) {
-    }
+    Exo.findOne({ nom: req.params.item }, (err, url) => {
+        QRCode.toDataURL(siteUrl+'item/' + url.nom, function (err, url) {
+            res.json(url);
+        })
+    }).lean();
 }
-
 module.exports = controller;

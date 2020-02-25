@@ -16,7 +16,6 @@ $(() => {
     grecaptcha.ready(function () {
       grecaptcha.execute('6Lep6NoUAAAAABVg-Rt15HlXBohuCJK7QhggzQgT', { action: 'homepage' }).then(function (token) { // GOOGLE RECAPCHA V3
         $('#form-url').prepend('<input type="hidden" name="token" value="' + token + '">');
-        // $('#form-url').submit();
         let url = {
           token : token,
           url_input: $('#url-input').val()
@@ -31,7 +30,7 @@ $(() => {
           $('[data-toggle="tooltip"]').tooltip(); // ENABLE TOOLTIP ON MODAL
           $('[data-copy-id]').click(function() { // COPY FUNCTION ON MODAL 
             let id = $(this).data('copyId');
-            let text = $(`[data-id=${id}]`).text().trim();
+            let text = $(`div[data-id=${id}]`).text().trim();
             let temp = $("<input style='opacity:0;'>");
             $("#modalTpl .modal-body").append(temp);
             temp.val(text).select();
@@ -68,10 +67,10 @@ $(() => {
     $('#qrcode').html('');
   })
 
-  $('.[data-copy-id]').click(function() { // COPY FUNCTION
+  $('[data-copy-id]').click(function() { // COPY FUNCTION
       let id = $(this).data('copyId');
-      console.log(id);
       let text = $(`a[data-id=${id}]`).text().trim();
+      // console.log(text);
       let temp = $("<input style='opacity:0;'>");
       $("body").append(temp);
       temp.val(text).select();
@@ -79,5 +78,7 @@ $(() => {
       $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
       temp.remove();
   });
+
+  $('#try-now-cta').click(()=> $('#url-input').focus());
 
 })
