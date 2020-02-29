@@ -6,14 +6,11 @@ $(() => {
   $('#submit-btn').click((e) => {
     if ($("#modalTpl").length > 0) {$("#modalTpl").remove();}
     if ($("#successModal").length > 0) {$("#successModal").remove();}
-
-     
     e.preventDefault();
     if ($('#submit-btn.disabled').length) return;
     if ($('#url-input').val() == "") return $('#form-url').parsley().validate();
     $('#form-url .not-loading').addClass('d-none');
     $('#form-url .loading').removeClass('d-none');
-
     grecaptcha.ready(function () {
       grecaptcha.execute('6Lep6NoUAAAAABVg-Rt15HlXBohuCJK7QhggzQgT', { action: 'homepage' }).then(function (token) { // GOOGLE RECAPCHA V3
         $('#form-url').prepend('<input type="hidden" name="token" value="' + token + '">');
@@ -24,27 +21,13 @@ $(() => {
         $.post('/', url, (data) => { // POST NEW URL 
           $('#form-url .loading').addClass('d-none');
           $('#form-url .not-loading').removeClass('d-none');
-          // console.log(data);
           $('html').append(data);
-          
           $('#modalTpl').modal('toggle');
-          tooltip() // ENABLE TOOLTIP ON MODAL
-          // $('[data-copy-id]').click(function() { // COPY FUNCTION ON MODAL 
-          //   let id = $(this).data('copyId');
-          //   let text = $(`div[data-id=${id}]`).text().trim();
-          //   let temp = $("<input style='opacity:0;'>");
-          //   $("#modalTpl .modal-body").append(temp);
-          //   temp.val(text).select();
-          //   document.execCommand("copy");
-          //   $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
-          //   temp.remove();
-          // })
-          enablecopy()
-
+          tooltip() // TOOLTIPS ON MODAL
+          copy(onModal=true) // COPY ON MODAL
         })
       });
     });
-
   })
 
   $('#url-input').on('keyup', e => {
@@ -65,12 +48,6 @@ $(() => {
     });
   });
 
-  $('#myModal').on('hidden.bs.modal', function (e) {
-    $('#qrcode').html('');
-  })
-
-  
-
   $('#try-now-cta').click(()=> $('#url-input').focus());
 
   $('.page-link').click(e =>{
@@ -82,21 +59,27 @@ $(() => {
     $.get(url, (data)=> {
       $('.latest-list').html(data)
       tooltip()
-      enablecopy()
+      copy()
     })
-  })
+  });
 
-  enablecopy()
+  copy()
+
   $(document).ready($('.page-link.bg-primary').click());
+
+
 })
 
-function enablecopy() {
-  $('[data-copy-id]').click(function() { // COPY FUNCTION
+function copy(onModal = false) { // COPY FUNCTION
+  $('[data-copy-id]').click(function() {
     let id = $(this).data('copyId');
     let text = $(`a[data-id=${id}]`).text().trim();
-    console.log(text);
     let temp = $("<input style='opacity:0;'>");
-    $("body").append(temp);
+    if (onModal)
+      $("body").append(temp);
+      $("#modalTpl .modal-body").append(temp);
+    if (!onModal)
+      $("body").append(temp);
     temp.val(text).select();
     document.execCommand("copy");
     $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
@@ -104,5 +87,4 @@ function enablecopy() {
   });
 }
 
-tooltip = () => $('[data-toggle="tooltip"]').tooltip(); // ENABLE TOOLTIPS 
-
+tooltip = () => $('[data-toggle="tooltip"]').tooltip(); // TOOLTIPS 
