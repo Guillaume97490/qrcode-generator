@@ -20,13 +20,6 @@ controller.index = async (req, res, next) => {
 
         const pageCount = Math.ceil(itemCount / req.query.limit);
         if (req.xhr) {
-            // res.json({
-            //     urls: results,
-            //     pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
-            //     pageCount,
-            //     itemCount,
-            //     siteUrl
-            //     })
             res.set('Content-Type', 'text/html');
             data={
                 urls: results,
