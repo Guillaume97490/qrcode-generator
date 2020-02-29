@@ -1,5 +1,5 @@
 const controller = {};
-let Exo = require('../models/exo');
+let Slug = require('../models/slug');
 const validator = require('validator');
 const paginate = require('express-paginate');
 const QRCode = require('qrcode');
@@ -13,12 +13,12 @@ controller.index = async (req, res, next) => {
     
     try {
         const [results, itemCount] = await Promise.all([
-            Exo.find({}).sort({ _id: -1 }).limit(req.query.limit).skip(req.skip).lean().exec(),
-            Exo.countDocuments({})
+            Slug.find({}).sort({ _id: -1 }).limit(req.query.limit).skip(req.skip).lean().exec(),
+            Slug.countDocuments({})
         ]);
 
         const pageCount = Math.ceil(itemCount / req.query.limit);
-        res.render('./exo/index.ejs', {
+        res.render('./slug/index.ejs', {
             urls: results,
             pageCount,
             itemCount,
@@ -48,9 +48,9 @@ controller.save = async (req, res) => {
         const exists = await urlExist("https://"+validator.unescape(url));
         if (exists === true){
           if (!process.env.SECRET_KEY) { // CHECK IF GOOGLE RECAPTCHA SECRET_KEY
-            Exo.nextCount(function(err, count) {
+            Slug.nextCount(function(err, count) {
                 if (err) throw err;
-                let newUrl = Exo({url}); // CREATE NEW OBJECT OF URL
+                let newUrl = Slug({url}); // CREATE NEW OBJECT OF URL
                 newUrl.nextCount(function(err, count) {
                     if (err) throw err;
                     newUrl.slug = validator.escape('item-' + count).trim();
@@ -82,9 +82,9 @@ controller.save = async (req, res) => {
             .then(response => response.json())
             .then(google_response => {
                 if (google_response.success == true) { // IF GOOGLE RECAPTCHA IS OK
-                    Exo.nextCount(function(err, count) {
+                    Slug.nextCount(function(err, count) {
                         if (err) throw err;
-                        let newUrl = Exo({url});
+                        let newUrl = Slug({url});
                         newUrl.nextCount(function(err, count) {
                             if (err) throw err
                             newUrl.slug = validator.escape('item-' + count).trim();
@@ -133,7 +133,7 @@ controller.save = async (req, res) => {
 }
 
 controller.item = (req, res) => {
-    Exo.findOne({ slug: req.params.id }, (err, url) => {
+    Slug.findOne({ slug: req.params.id }, (err, url) => {
         if (url === null) {
             res.redirect('/');
         }
@@ -144,7 +144,7 @@ controller.item = (req, res) => {
 }
 
 controller.qrcode = (req, res) => {
-    Exo.findOne({ slug: req.params.item }, (err, url) => {
+    Slug.findOne({ slug: req.params.item }, (err, url) => {
         QRCode.toDataURL(siteUrl+'item/' + url.slug, function (err, url) {
             res.json(url);
         })
