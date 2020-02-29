@@ -67,6 +67,10 @@ $(() => {
 
   $(document).ready($('.page-link.bg-primary').click());
 
+  $('#myModal').on('hidden.bs.modal', function (e) {
+    $('#qrcode').html('');
+  })
+
 
 })
 
