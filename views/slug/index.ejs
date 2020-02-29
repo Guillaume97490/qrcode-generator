@@ -73,6 +73,9 @@
                             <div class="ib-text">
                                 <h5>Url d'origine</h5>
                                 <p>Vous avez une url à partager mais le lien d'origine est trop long.</p>
+                                <p class="mb-0">Exemple :</p>
+                                <p>https://www.lemondeinformatique.fr/actualites/lire-general-bruno-poirier-coutansais-st-si-%C2%B2--nous-avons-opte-pour-un-tres-fort-niveau-d-automatisation-de-nos-systemes-78182.html</p>
+                             
                             </div>
                         </div>
                     </div>
@@ -82,6 +85,8 @@
                             <div class="ib-text">
                                 <h5>Smart-url</h5>
                                 <p>Grâce à Smart-url obtenez une url facile à partager. C'est rapide et gratuit !</p>
+                                <p class="mb-0">Résultat :</p>
+                                <p><%= siteUrl%>url/2</p>
                             </div>
                         </div>
                     </div>
@@ -110,38 +115,15 @@
                     </div>
                 </div>
                 
-                <% urls.forEach(function(url) { %>
-        
-                    <div class="mb-1 col-12">
-                        <div class="py-2 url-item">
-                            <div class="row">
-        
-                                <div class="col-lg-12 d-flex align-items-center">
-                                    <div class="row col-12">
-                                        <div class="col-10">
-                                            <a class="text-white text-break" data-id="<%= url.slug%>" href="" target="_blank" rel="noopener noreferrer"><%= siteUrl%>item/<%= url.slug%></a>
-                                        </div>
-                                        <div class="col-2 text-right">
-                                            <button data-copy-id="<%= url.slug%>" type="button" class="btn" data-toggle="tooltip" data-placement="top" title="Copier le lien">
-                                                <i class="far text-white fa-clipboard"></i>
-                                            </button>
-    
-                                        </div>
-                                    </div>
-                                        
-                                </div>
-        
-                            </div>
-                            
-                        </div>
-                    </div>
-                <%  }) %>
+                <div class="latest-list">
+                 
+                </div>
                 
                 <nav class="col-12" aria-label="Page navigation example">
                     <ul class="pagination overflow-auto">
     
                         <%for(let i =1; i <= pageCount;  i++ ) {  %>
-                            <li class="page-item"><a  class="page-link <% if ((page == i) || (!page && i==1) || (page < 0 && i==1) ) { %>bg-primary text-white<% } %>" href="/?page=<%=i%>"><%=i%></a></li>
+                            <li class="page-item"><a  class="page-link border-0 <% if ((page == i) || (!page && i==1) || (page < 0 && i==1) ) { %>bg-primary text-white<% } %>" href="/?page=<%=i%>"><%=i%></a></li>
                         <% } %>
                         <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                             <li class="page-item"><a class="page-link" href="#">Next</a></li> -->

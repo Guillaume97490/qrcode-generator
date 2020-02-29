@@ -7,24 +7,47 @@ const fetch = require('isomorphic-fetch');
 const siteUrl = process.env.URL||'localhost:3000/'
 const ejs = require('ejs');
 let modalTpl = require('../views/templates/modalTpl.js').data;
+let lastUrlList = require('../views/templates/lastUrlList.js').data;
 
 
 controller.index = async (req, res, next) => {
     
     try {
         const [results, itemCount] = await Promise.all([
-            Slug.find({}).sort({ _id: -1 }).limit(req.query.limit).skip(req.skip).lean().exec(),
+            Slug.find({}).sort({ _id: -1 }).limit(req.query.limit).skip(req.skip).lean().select('_id').exec(),
             Slug.countDocuments({})
         ]);
 
         const pageCount = Math.ceil(itemCount / req.query.limit);
-        res.render('./slug/index.ejs', {
-            urls: results,
-            pageCount,
-            itemCount,
-            pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
-            siteUrl 
-        })
+        if (req.xhr) {
+            // res.json({
+            //     urls: results,
+            //     pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
+            //     pageCount,
+            //     itemCount,
+            //     siteUrl
+            //     })
+            res.set('Content-Type', 'text/html');
+            data={
+                urls: results,
+                pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
+                pageCount,
+                itemCount,
+                siteUrl
+            }
+            let compiled = ejs.compile(lastUrlList);
+            let html = compiled({data});
+            res.send(Buffer.from(html,'utf8')); // SEND MODAL IN HTML 
+
+        }else{
+            res.render('./slug/index.ejs', {
+                urls: results,
+                pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
+                pageCount,
+                itemCount,
+                siteUrl 
+            })
+        }
     } catch (err) {
         next(err);
     }
@@ -53,7 +76,6 @@ controller.save = async (req, res) => {
                 let newUrl = Slug({url}); // CREATE NEW OBJECT OF URL
                 newUrl.nextCount(function(err, count) {
                     if (err) throw err;
-                    newUrl.slug = validator.escape('item-' + count).trim();
                     newUrl.save(function (err) { // SAVE THE OBJECT
                         if (err) throw err;
                         if (req.xhr) { // IF AJAX 
@@ -87,7 +109,6 @@ controller.save = async (req, res) => {
                         let newUrl = Slug({url});
                         newUrl.nextCount(function(err, count) {
                             if (err) throw err
-                            newUrl.slug = validator.escape('item-' + count).trim();
                             newUrl.save(function (err) {
                                 if (err) throw err;
                                 if (req.xhr) {
@@ -132,21 +153,22 @@ controller.save = async (req, res) => {
 
 }
 
-controller.item = (req, res) => {
-    Slug.findOne({ slug: req.params.id }, (err, url) => {
-        if (url === null) {
+controller.redirect = (req, res) => {
+    Slug.findOne({ _id: req.params.id }, (err, url) => {
+        console.log(url)
+        if (url === null) 
             res.redirect('/');
-        }
-        if (url !== null) {
+        
+        if (url !== null) 
             res.redirect('https://' + validator.unescape(url.url));
-        }
+        
     }).lean();
 }
 
 controller.qrcode = (req, res) => {
-    Slug.findOne({ slug: req.params.item }, (err, url) => {
-        QRCode.toDataURL(siteUrl+'item/' + url.slug, function (err, url) {
-            res.json(url);
+    Slug.findOne({ _id: req.params.item }, (err, url) => {
+        QRCode.toDataURL(siteUrl+'url/' + url._id, function (err, slug) {
+            res.json(slug);
         })
     }).lean();
 }

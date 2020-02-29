@@ -1,5 +1,6 @@
 
 $(() => {
+
   $('[data-toggle="tooltip"]').tooltip(); // ENABLE TOOLTIPS 
 
   $('#submit-btn').click((e) => {
@@ -81,4 +82,14 @@ $(() => {
 
   $('#try-now-cta').click(()=> $('#url-input').focus());
 
+  $('.page-link').click(e =>{
+    e.preventDefault();
+    el = $(e.currentTarget);
+    $('.page-link').each((i,e) => $(e).removeClass('bg-primary text-white'));
+    el.addClass('bg-primary text-white')
+    let url = el.attr('href');
+    $.get(url, (data)=> $('.latest-list').html(data))
+  })
+
+  $(document).ready($('.page-link.bg-primary').click());
 })
