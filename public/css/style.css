@@ -327,3 +327,10 @@ a:hover,a:focus {
 .c-orange{
     color: #f43f00;
 }
+.bg-primary {
+    background-color: #f43f00 !important;
+}
+
+a.bg-primary:focus, a.bg-primary:hover, button.bg-primary:focus, button.bg-primary:hover {
+    background-color: #b73306 !important;
+}

@@ -1,5 +1,5 @@
 const controller = {};
-let Exo = require('../models/exo');
+let Slug = require('../models/slug');
 const validator = require('validator');
 const paginate = require('express-paginate');
 const QRCode = require('qrcode');
@@ -7,24 +7,40 @@ const fetch = require('isomorphic-fetch');
 const siteUrl = process.env.URL||'localhost:3000/'
 const ejs = require('ejs');
 let modalTpl = require('../views/templates/modalTpl.js').data;
+let lastUrlList = require('../views/templates/lastUrlList.js').data;
 
 
 controller.index = async (req, res, next) => {
     
     try {
         const [results, itemCount] = await Promise.all([
-            Exo.find({}).sort({ _id: -1 }).limit(req.query.limit).skip(req.skip).lean().exec(),
-            Exo.countDocuments({})
+            Slug.find({}).sort({ _id: -1 }).limit(req.query.limit).skip(req.skip).lean().select('_id').exec(),
+            Slug.countDocuments({})
         ]);
 
         const pageCount = Math.ceil(itemCount / req.query.limit);
-        res.render('./exo/index.ejs', {
-            urls: results,
-            pageCount,
-            itemCount,
-            pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
-            siteUrl 
-        })
+        if (req.xhr) {
+            res.set('Content-Type', 'text/html');
+            data={
+                urls: results,
+                pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
+                pageCount,
+                itemCount,
+                siteUrl
+            }
+            let compiled = ejs.compile(lastUrlList);
+            let html = compiled({data});
+            res.send(Buffer.from(html,'utf8')); // SEND MODAL IN HTML 
+
+        }else{
+            res.render('./slug/index.ejs', {
+                urls: results,
+                pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
+                pageCount,
+                itemCount,
+                siteUrl 
+            })
+        }
     } catch (err) {
         next(err);
     }
@@ -48,12 +64,11 @@ controller.save = async (req, res) => {
         const exists = await urlExist("https://"+validator.unescape(url));
         if (exists === true){
           if (!process.env.SECRET_KEY) { // CHECK IF GOOGLE RECAPTCHA SECRET_KEY
-            Exo.nextCount(function(err, count) {
+            Slug.nextCount(function(err, count) {
                 if (err) throw err;
-                let newUrl = Exo({url}); // CREATE NEW OBJECT OF URL
+                let newUrl = Slug({url}); // CREATE NEW OBJECT OF URL
                 newUrl.nextCount(function(err, count) {
                     if (err) throw err;
-                    newUrl.nom = validator.escape('item-' + count).trim();
                     newUrl.save(function (err) { // SAVE THE OBJECT
                         if (err) throw err;
                         if (req.xhr) { // IF AJAX 
@@ -82,12 +97,11 @@ controller.save = async (req, res) => {
             .then(response => response.json())
             .then(google_response => {
                 if (google_response.success == true) { // IF GOOGLE RECAPTCHA IS OK
-                    Exo.nextCount(function(err, count) {
+                    Slug.nextCount(function(err, count) {
                         if (err) throw err;
-                        let newUrl = Exo({url});
+                        let newUrl = Slug({url});
                         newUrl.nextCount(function(err, count) {
                             if (err) throw err
-                            newUrl.nom = validator.escape('item-' + count).trim();
                             newUrl.save(function (err) {
                                 if (err) throw err;
                                 if (req.xhr) {
@@ -123,28 +137,30 @@ controller.save = async (req, res) => {
             let compiled = ejs.compile(modalTpl);
             let html = compiled({data});
             res.send(Buffer.from(html,'utf8'));
+        }else{
+            res.redirect('/');
         }
-          res.redirect('/');
+
         }
     })();
 
 }
 
-controller.item = (req, res) => {
-    Exo.findOne({ nom: req.params.id }, (err, url) => {
-        if (url === null) {
+controller.redirect = (req, res) => {
+    Slug.findOne({ _id: req.params.id }, (err, url) => {
+        if (url === null) 
             res.redirect('/');
-        }
-        if (url !== null) {
+        
+        if (url !== null) 
             res.redirect('https://' + validator.unescape(url.url));
-        }
+        
     }).lean();
 }
 
 controller.qrcode = (req, res) => {
-    Exo.findOne({ nom: req.params.item }, (err, url) => {
-        QRCode.toDataURL(siteUrl+'item/' + url.nom, function (err, url) {
-            res.json(url);
+    Slug.findOne({ _id: req.params.item }, (err, url) => {
+        QRCode.toDataURL(siteUrl+'url/' + url._id, function (err, slug) {
+            res.json(slug);
         })
     }).lean();
 }

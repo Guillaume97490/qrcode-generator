@@ -6,7 +6,7 @@ Parsley.addMessages('fr', {
     type: {
       email:        "Cette valeur n'est pas une adresse email valide.",
       url:          "Cette valeur n'est pas une URL valide.",
-      number:       "Cette valeur doit être un nombre.",
+      number:       "Cette valeur doit être un slugbre.",
       integer:      "Cette valeur doit être un entier.",
       digits:       "Cette valeur doit être numérique.",
       alphanum:     "Cette valeur doit être alphanumérique."

@@ -20,11 +20,11 @@ exports.data = `<div id="modalTpl" class="modal fade" tabindex="-1" role="dialog
                     <% if (data.type == "success"){ %>
                         <div class="col-lg-12 p-0 py-3 d-flex align-items-center">
                             <div class="row col-12">
-                                <div data-id="<%= data.newUrl.nom%>" class="col-10 d-flex align-items-center text-break">
-                                    <%= data.siteUrl%>item/<%= data.newUrl.nom%>
-                                </div>
+                                <a data-id="<%= data.newUrl.id%>" class="col-10 d-flex align-items-center text-break">
+                                    <%= data.siteUrl%>url/<%= data.newUrl.id%>
+                                </a>
                                 <div class="col-2 text-right">
-                                    <button data-copy-id="<%= data.newUrl.nom%>" type="button" class="btn" data-toggle="tooltip" data-placement="top" title="Copier le lien">
+                                    <button data-copy-id="<%= data.newUrl.id%>" type="button" class="btn" data-toggle="tooltip" data-placement="top" title="Copier le lien">
                                         <i class="far fa-clipboard"></i>
                                     </button>
 
@@ -34,7 +34,7 @@ exports.data = `<div id="modalTpl" class="modal fade" tabindex="-1" role="dialog
                         </div>
 
                         <div class="col-12 pb-2">
-                            <a data-id="<%= data.newUrl.nom%>" class="btn btn-primary" href="">Génerer le Qr Code</a>
+                            <a data-qr-id="<%= data.newUrl.id%>" class="btn btn-primary" href="">Afficher le Qr Code</a>
                         </div>
 
                             
@@ -42,8 +42,8 @@ exports.data = `<div id="modalTpl" class="modal fade" tabindex="-1" role="dialog
 
                         <div class="col-12">
                             <div class="row border-top">
-                                <div class="col-12 mt-3 text-secondary">Vous pouvez des a présent copiez votre lien ci-dessus.</div>
-                                <div class="col-12 mb-3 text-secondary">Merci d'avoir utiliser smart-url !</div>
+                                <div class="col-12 mt-3 text-secondary">Vous pouvez copié votre lien ci-dessus.</div>
+                                <div class="col-12 mb-3 text-secondary">Merci d'avoir utilisé smart-url !</div>
                                 <div class="col-12 text-right" style="opacity: .5;">
                                     <i class="fas display-4 text-success fa-smile-wink"></i>
                                 </div> 
