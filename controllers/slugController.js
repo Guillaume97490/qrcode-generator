@@ -53,7 +53,7 @@ controller.save = async (req, res) => {
                 let newUrl = Exo({url}); // CREATE NEW OBJECT OF URL
                 newUrl.nextCount(function(err, count) {
                     if (err) throw err;
-                    newUrl.nom = validator.escape('item-' + count).trim();
+                    newUrl.slug = validator.escape('item-' + count).trim();
                     newUrl.save(function (err) { // SAVE THE OBJECT
                         if (err) throw err;
                         if (req.xhr) { // IF AJAX 
@@ -87,7 +87,7 @@ controller.save = async (req, res) => {
                         let newUrl = Exo({url});
                         newUrl.nextCount(function(err, count) {
                             if (err) throw err
-                            newUrl.nom = validator.escape('item-' + count).trim();
+                            newUrl.slug = validator.escape('item-' + count).trim();
                             newUrl.save(function (err) {
                                 if (err) throw err;
                                 if (req.xhr) {
@@ -123,15 +123,17 @@ controller.save = async (req, res) => {
             let compiled = ejs.compile(modalTpl);
             let html = compiled({data});
             res.send(Buffer.from(html,'utf8'));
+        }else{
+            res.redirect('/');
         }
-          res.redirect('/');
+
         }
     })();
 
 }
 
 controller.item = (req, res) => {
-    Exo.findOne({ nom: req.params.id }, (err, url) => {
+    Exo.findOne({ slug: req.params.id }, (err, url) => {
         if (url === null) {
             res.redirect('/');
         }
@@ -142,8 +144,8 @@ controller.item = (req, res) => {
 }
 
 controller.qrcode = (req, res) => {
-    Exo.findOne({ nom: req.params.item }, (err, url) => {
-        QRCode.toDataURL(siteUrl+'item/' + url.nom, function (err, url) {
+    Exo.findOne({ slug: req.params.item }, (err, url) => {
+        QRCode.toDataURL(siteUrl+'item/' + url.slug, function (err, url) {
             res.json(url);
         })
     }).lean();

@@ -20,12 +20,12 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
 // importing routes
-const exoRoutes = require('./routes/exo');
+const slugRoutes = require('./routes/slug');
 
 // settings
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
-app.use('/', exoRoutes); // routes
+app.use('/', slugRoutes); // routes
 app.listen(app.get('port'), () => { // starting the server
     console.log(`server on port ${app.get('port')}`);
 });
