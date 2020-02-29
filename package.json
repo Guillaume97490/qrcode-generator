@@ -1,7 +1,7 @@
 {
-  "name": "slug",
+  "name": "smart-url",
   "version": "1.0.0",
-  "description": "",
+  "description": "## Technologies - Node js - Express - mongodb",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -25,5 +25,14 @@
     "qrcode": "^1.4.4",
     "url-exist": "^1.1.1",
     "validator": "^12.2.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Guillaume97490/qrcode-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Guillaume97490/qrcode-generator/issues"
+  },
+  "homepage": "https://github.com/Guillaume97490/qrcode-generator#readme"
 }
