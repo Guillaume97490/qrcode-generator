@@ -20,9 +20,9 @@ exports.data = `<div id="modalTpl" class="modal fade" tabindex="-1" role="dialog
                     <% if (data.type == "success"){ %>
                         <div class="col-lg-12 p-0 py-3 d-flex align-items-center">
                             <div class="row col-12">
-                                <div data-id="<%= data.newUrl.id%>" class="col-10 d-flex align-items-center text-break">
+                                <a data-id="<%= data.newUrl.id%>" class="col-10 d-flex align-items-center text-break">
                                     <%= data.siteUrl%>url/<%= data.newUrl.id%>
-                                </div>
+                                </a>
                                 <div class="col-2 text-right">
                                     <button data-copy-id="<%= data.newUrl.id%>" type="button" class="btn" data-toggle="tooltip" data-placement="top" title="Copier le lien">
                                         <i class="far fa-clipboard"></i>
@@ -34,7 +34,7 @@ exports.data = `<div id="modalTpl" class="modal fade" tabindex="-1" role="dialog
                         </div>
 
                         <div class="col-12 pb-2">
-                            <a data-id="<%= data.newUrl.id%>" class="btn btn-primary" href="">Génerer le Qr Code</a>
+                            <a data-qr-id="<%= data.newUrl.id%>" class="btn btn-primary" href="">Génerer le Qr Code</a>
                         </div>
 
                             

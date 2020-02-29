@@ -155,7 +155,6 @@ controller.save = async (req, res) => {
 
 controller.redirect = (req, res) => {
     Slug.findOne({ _id: req.params.id }, (err, url) => {
-        console.log(url)
         if (url === null) 
             res.redirect('/');
         

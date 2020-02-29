@@ -1,7 +1,7 @@
 
 $(() => {
 
-  $('[data-toggle="tooltip"]').tooltip(); // ENABLE TOOLTIPS 
+  tooltip() // ENABLE TOOLTIPS 
 
   $('#submit-btn').click((e) => {
     if ($("#modalTpl").length > 0) {$("#modalTpl").remove();}
@@ -28,17 +28,18 @@ $(() => {
           $('html').append(data);
           
           $('#modalTpl').modal('toggle');
-          $('[data-toggle="tooltip"]').tooltip(); // ENABLE TOOLTIP ON MODAL
-          $('[data-copy-id]').click(function() { // COPY FUNCTION ON MODAL 
-            let id = $(this).data('copyId');
-            let text = $(`div[data-id=${id}]`).text().trim();
-            let temp = $("<input style='opacity:0;'>");
-            $("#modalTpl .modal-body").append(temp);
-            temp.val(text).select();
-            document.execCommand("copy");
-            $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
-            temp.remove();
-          })
+          tooltip() // ENABLE TOOLTIP ON MODAL
+          // $('[data-copy-id]').click(function() { // COPY FUNCTION ON MODAL 
+          //   let id = $(this).data('copyId');
+          //   let text = $(`div[data-id=${id}]`).text().trim();
+          //   let temp = $("<input style='opacity:0;'>");
+          //   $("#modalTpl .modal-body").append(temp);
+          //   temp.val(text).select();
+          //   document.execCommand("copy");
+          //   $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
+          //   temp.remove();
+          // })
+          enablecopy()
 
         })
       });
@@ -53,9 +54,9 @@ $(() => {
     }
   })
 
-  $(document).on('click', 'a[data-id]', function (e) { // GET QRCODE FUNCTION
+  $(document).on('click', 'a[data-qr-id]', function (e) { // GET QRCODE FUNCTION
     e.preventDefault();
-    let id = $(this).data('id');
+    let id = $(this).data('qrId');
     $.get(`/qrcode/${id}`, (data) => {
       let image = new Image();
       image.src = data;
@@ -68,17 +69,7 @@ $(() => {
     $('#qrcode').html('');
   })
 
-  $('[data-copy-id]').click(function() { // COPY FUNCTION
-      let id = $(this).data('copyId');
-      let text = $(`a[data-id=${id}]`).text().trim();
-      // console.log(text);
-      let temp = $("<input style='opacity:0;'>");
-      $("body").append(temp);
-      temp.val(text).select();
-      document.execCommand("copy");
-      $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
-      temp.remove();
-  });
+  
 
   $('#try-now-cta').click(()=> $('#url-input').focus());
 
@@ -88,8 +79,30 @@ $(() => {
     $('.page-link').each((i,e) => $(e).removeClass('bg-primary text-white'));
     el.addClass('bg-primary text-white')
     let url = el.attr('href');
-    $.get(url, (data)=> $('.latest-list').html(data))
+    $.get(url, (data)=> {
+      $('.latest-list').html(data)
+      tooltip()
+      enablecopy()
+    })
   })
 
+  enablecopy()
   $(document).ready($('.page-link.bg-primary').click());
 })
+
+function enablecopy() {
+  $('[data-copy-id]').click(function() { // COPY FUNCTION
+    let id = $(this).data('copyId');
+    let text = $(`a[data-id=${id}]`).text().trim();
+    console.log(text);
+    let temp = $("<input style='opacity:0;'>");
+    $("body").append(temp);
+    temp.val(text).select();
+    document.execCommand("copy");
+    $(this).attr('data-original-title',text+ ' à été copié').tooltip('show');
+    temp.remove();
+  });
+}
+
+tooltip = () => $('[data-toggle="tooltip"]').tooltip(); // ENABLE TOOLTIPS 
+
