@@ -24,7 +24,7 @@
     "mongoose-auto-increment": "^5.0.1",
     "qrcode": "^1.4.4",
     "url-exist": "^1.1.1",
-    "validator": "^12.2.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {},
   "repository": {
